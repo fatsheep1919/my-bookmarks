@@ -8,6 +8,18 @@ interface IProps {
   onClose: () => void;
 }
 
+const getPageTitle = async (url: string) => {
+  try {
+    const response = await fetch(url);
+    const html = await response.text();
+    const title = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1];
+    return title;
+  } catch (err) {
+    console.error(`Error fetching page title: ${err}`);
+    return null;
+  }
+};
+
 export default function AddBookMarkModal(props: IProps) {
   const { visible, onClose } = props;
   const [form] = Form.useForm();
@@ -42,10 +54,14 @@ export default function AddBookMarkModal(props: IProps) {
     form.resetFields();
   }, [form]);
 
+  const handleInputUrl = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const title = await getPageTitle(e.target.value);
+    console.log('title:', title);
+  }, []);
+
   return (
     <Modal
       title="Add New BookMark"
-      style={{ top: '30%' }}
       open={visible}
       onOk={handleSave}
       onCancel={onClose}
@@ -62,7 +78,7 @@ export default function AddBookMarkModal(props: IProps) {
           }}
         >
           <Form.Item name="url" label="Url" rules={[{ required: true }]}>
-            <Input allowClear />
+            <Input allowClear onBlur={handleInputUrl} />
           </Form.Item>
           <Form.Item name="name" label="Name">
             <Input allowClear />

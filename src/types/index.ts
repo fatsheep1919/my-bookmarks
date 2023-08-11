@@ -11,6 +11,8 @@ export interface BookMark {
     w: number;
     h: number;
   }; // type === folder
+  pageTitle?: string;
+  favicon?: string;
 }
 
 export interface BookMarkTreeNode extends BookMark {

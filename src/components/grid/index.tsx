@@ -26,7 +26,7 @@ export default function Grid() {
     const topFolders = bookmarks.filter(it => it.pId === 0 && it.type === 'folder');
     if (!topFolders[0]) {
       const topUrls = bookmarks.filter(it => it.type === 'url' && it.pId === 0);
-      return [{ i: 'default', x: 0, y: 0, w: 6, h: 3, data: {
+      return [{ i: 'default', x: 0, y: 0, w: 6, h: 4, data: {
         id: 0,
         pId: -1,
         type: 'folder',
@@ -48,6 +48,7 @@ export default function Grid() {
         layouts={{
           lg: layout
         }}
+        rowHeight={130}
       >
         {layout.map((item) => (
           <div key={item.i} className='border border-solid bg-white rounded-lg shadow-md'>
