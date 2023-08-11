@@ -30,7 +30,7 @@ export default function Layout() {
 
   return (
     <div className="h-screen flex flex-col">
-      <div className='w-full h-20 flex justify-center bg-slate-300'>
+      <div className='w-full h-20 flex shrink-0 justify-center bg-slate-300'>
         <div className="w-5/6 h-full flex justify-between items-center">
           <div className='flex justify-center items-center gap-4'>
             <div className='text-2xl font-bold'>My-BookMark</div>
@@ -47,7 +47,7 @@ export default function Layout() {
         </div>
       </div>
       <div className='w-full flex-1 flex justify-center'>
-        <div className='w-5/6 h-full'>
+        <div className='w-5/6 h-full overflow-scroll'>
           <Outlet />
 
         </div>
