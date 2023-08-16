@@ -5,7 +5,7 @@ import {
 
 import Layout from './layout';
 import DashboardPage from './pages/dashboard';
-import ManagePage from './pages/manage';
+import ListPage from './pages/list';
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<DashboardPage />} />
         <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="manage" element={<ManagePage />} />
+        <Route path="list" element={<ListPage />} />
       </Route>
     </Routes>
   );
