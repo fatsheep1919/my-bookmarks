@@ -44,6 +44,7 @@ export default function Grid() {
         cols={{
           lg: 6,
           md: 6,
+          sm: 4,
         }}
         layouts={{
           lg: layout

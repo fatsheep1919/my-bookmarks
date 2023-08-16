@@ -51,8 +51,8 @@ export default function Layout() {
             </div>
           </div>
           <div className='flex gap-2 mx-6'>
-            <Button type="text" onClick={() => navigate('/dashboard')}>Dashboard</Button>
-            <Button type="text" onClick={() => navigate('/list')}>List</Button>
+            <Button type="text" onClick={() => navigate('dashboard')}>Dashboard</Button>
+            <Button type="text" onClick={() => navigate('list')}>List</Button>
             <Button type='primary' onClick={showModal} className='ml-2'>Add New</Button>
           </div>
           
