@@ -24,3 +24,14 @@ export interface BookMarkInput {
   name?: string;
   folder?: string;
 }
+
+//
+
+export interface BookMarkRaw {
+  id: string;
+  title?: string;
+  parentId?: string;
+  index?: number;
+  dateAdded?: number;
+  children?: BookMarkRaw[];
+}
