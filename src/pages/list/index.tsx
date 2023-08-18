@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import type { MenuProps } from 'antd';
-import { Menu, Avatar, List } from 'antd';
+import { Menu, Avatar, List, Button } from 'antd';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -46,8 +46,15 @@ export default function ListPage() {
           defaultSelectedKeys={['all']}
           onClick={handleClick}
         />
+        <div className='flex justify-center mt-4'>
+          <Button type='dashed'>New Folder</Button>
+        </div>
       </div>
       <div className='flex-1 px-6 py-4'>
+        <div className='flex justify-end gap-2'>
+          <Button type='default' danger>Delete All</Button>
+          <Button type='default' danger>Delete Folder</Button>
+        </div>
         <List
           itemLayout="horizontal"
           dataSource={data}

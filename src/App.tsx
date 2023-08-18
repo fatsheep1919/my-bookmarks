@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   Routes, Route
 } from "react-router-dom";
@@ -8,6 +8,16 @@ import DashboardPage from './pages/dashboard';
 import ListPage from './pages/list';
 
 function App() {
+
+  const load = useCallback(async () => {
+    const tree = await chrome?.bookmarks?.getTree?.();
+    console.log('chrome bookmarks:', tree);
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
   return (
     <Routes>
       {/* <Route path="/" element={<Layout />}>
