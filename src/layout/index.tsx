@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Input, Button, Select } from 'antd';
+import { Button, Select } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
 import AddBookMarkModal from '../components/bookmark/AddBookMarkModal';
@@ -33,9 +33,8 @@ export default function Layout() {
       <div className='w-full h-20 flex shrink-0 justify-center bg-slate-300'>
         <div className="w-5/6 h-full flex justify-between items-center">
           <div className='flex justify-center items-center gap-4'>
-            <div className='text-2xl font-bold mx-6'>My-BookMark</div>
-            <div className='w-64 mx-2'>
-              {/* <Input prefix={<SearchOutlined />} className='w-full' /> */}
+            <div className='text-2xl font-bold mx-10'>My-BookMark</div>
+            <div className='w-64 ml-6'>
               <Select
                 showSearch
                 className='w-full'

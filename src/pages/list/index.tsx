@@ -1,18 +1,29 @@
-import { useCallback } from 'react';
-import type { MenuProps } from 'antd';
-import { Menu, Avatar, List, Button } from 'antd';
+import React, { ReactNode } from 'react';
+import { Tree, Avatar, List, Button } from 'antd';
+import type { DataNode } from 'antd/es/tree';
+import { DownOutlined } from '@ant-design/icons';
 
-type MenuItem = Required<MenuProps>['items'][number];
+interface MyTreeNodeData extends DataNode {
+  title: string;
+  key: string;
+  children?: MyTreeNodeData[];
+}
 
-const menuItems: MenuItem[] = [
+const treeData: MyTreeNodeData[] = [
   {
-    label: <div className='w-full text-right'>all</div>,
+    title: 'parent',
     key: 'all',
+    children: [
+      {
+        title: 'child 1',
+        key: '0-0',
+      },
+      {
+        title: 'very very long title child',
+        key: '0-1',
+      },
+    ],
   },
-  {
-    label: <div className='w-full text-right'>u</div>,
-    key: 'u',
-  }
 ];
 
 const data = [
@@ -31,27 +42,32 @@ const data = [
   },
 ];
 
+
+
 export default function ListPage() {
-
-  const handleClick = useCallback(() => {
-
-  }, []);
-
   return (
     <div className='h-full flex'>
-      <div className='w-1/6 py-4'>
-        <Menu
-          mode="vertical"
-          items={menuItems}
-          defaultSelectedKeys={['all']}
-          onClick={handleClick}
-        />
-        <div className='flex justify-center mt-4'>
+      <div className='w-1/5 py-4'>
+        <div className='flex justify-end mb-4'>
           <Button type='dashed'>New Folder</Button>
         </div>
+        <Tree
+          defaultExpandAll
+          defaultSelectedKeys={['all']}
+          blockNode
+          switcherIcon={<DownOutlined className='mt-4' />}
+          treeData={treeData}
+          titleRender={(it: MyTreeNodeData): ReactNode => {
+            return (
+              <div className='py-1.5 px-3 text-md'>
+                {it.title}
+              </div>
+            )
+          }}
+        />
       </div>
       <div className='flex-1 px-6 py-4'>
-        <div className='flex justify-end gap-2'>
+        <div className='flex justify-end gap-2 mb-4'>
           <Button type='default' danger>Delete All</Button>
           <Button type='default' danger>Delete Folder</Button>
         </div>
