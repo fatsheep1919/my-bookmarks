@@ -18,14 +18,8 @@ export default function ListPage() {
 
   const handleMenuTreeSelected = useCallback((selectedKey: string) => {
     console.log('menuTree selectedKey:', selectedKey)
-    const re = bookmarks
-      .map(it => findById(it, selectedKey))
-      .filter(it => it);
-    console.log('find:', re)
-
-    if (re?.[0]) {
-      setListData(re[0].children || []);
-    }
+    const re = findById(bookmarks?.[0], selectedKey);
+    setListData(re?.children || []);
   }, [bookmarks]);
 
   useEffect(() => {
@@ -33,7 +27,7 @@ export default function ListPage() {
     console.log('bookmarks:', newTreeData);
     const folderTreeData = newTreeData.map(filterFolderChildrenOnly);
     console.log('menuTreeData:', folderTreeData);
-    setMenuTreeData(folderTreeData);
+    setMenuTreeData(folderTreeData?.[0]?.children || []);
   }, [bookmarks]);
 
   return (

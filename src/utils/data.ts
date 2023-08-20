@@ -3,12 +3,30 @@ import type { BookMarkRaw, BookMarkTreeNode } from '../types';
 export function formatToTreeNode(rawData: BookMarkRaw): BookMarkTreeNode {
   const treeNode = {
     ...rawData,
-    title: rawData.title || `folder-${rawData.id}`,
+    title: rawData.title || rawData.id,
     key: rawData.id,
+    type: rawData.children ? 'folder' : 'url',
     children: rawData.children?.map(formatToTreeNode),
   };
 
   return treeNode;
+}
+
+
+export function formatToFlatternTreeNode(rawData: BookMarkRaw[], arr: BookMarkTreeNode[]) {
+  rawData?.forEach(it => {
+    arr.push({
+      ...it,
+      title: it.title || it.id,
+      key: it.id,
+      type: it.children ? 'folder' : 'url',
+      children: undefined,
+    });
+
+    if (it.children && it.children.length > 0) {
+      formatToFlatternTreeNode(it.children, arr);
+    }
+  });
 }
 
 export function filterFolderChildrenOnly(treeNode: BookMarkTreeNode): BookMarkTreeNode {
@@ -23,9 +41,9 @@ export function filterFolderChildrenOnly(treeNode: BookMarkTreeNode): BookMarkTr
 }
 
 export function findById(bookmark: BookMarkRaw, id: string): BookMarkRaw | null {
-  if (bookmark.id === id) {
+  if (bookmark?.id === id) {
     return bookmark;
-  } else if (bookmark.children && bookmark.children.length > 0) {
+  } else if (bookmark?.children && bookmark.children?.length > 0) {
     const re: (BookMarkRaw | null)[] = bookmark.children
       .map(chd => findById(chd, id))
       .filter(it => it);

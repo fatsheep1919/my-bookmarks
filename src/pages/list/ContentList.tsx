@@ -1,13 +1,7 @@
 import { Avatar, List } from 'antd';
 
 import { BookMarkRaw } from "../../types";
-
-function faviconURL(u: string) {
-  const url = new URL(chrome.runtime.getURL("/_favicon/"));
-  url.searchParams.set("pageUrl", u);
-  url.searchParams.set("size", "20");
-  return url.toString();
-}
+import { faviconURL } from "../../utils/favicon";
 
 interface IProps {
   listData: BookMarkRaw[];

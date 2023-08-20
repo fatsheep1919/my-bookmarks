@@ -16,7 +16,7 @@ function App() {
   const load = useCallback(async () => {
     const tree: BookMarkRaw[] = await chrome?.bookmarks?.getTree?.();
     console.log('chrome bookmarks:', tree);
-    setBookMarks(tree?.[0]?.children || []);
+    setBookMarks(tree);
   }, []);
 
   useEffect(() => {

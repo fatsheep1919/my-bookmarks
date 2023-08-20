@@ -16,6 +16,7 @@ export interface BookMarkInput {
 
 export interface BookMarkTreeNode extends BookMarkRaw {
   key: string;
+  type: string;
   children?: BookMarkTreeNode[];
 }
 
