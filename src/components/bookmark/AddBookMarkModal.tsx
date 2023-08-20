@@ -30,19 +30,19 @@ export default function AddBookMarkModal(props: IProps) {
       await form.validateFields();
       const fields = form.getFieldsValue();
 
-      let targetFolderData;
-      if (fields.folder) {
-        targetFolderData = bookmarks.find(it => it.type === 'folder' && it.name === fields.folder);
-      }
+      // let targetFolderData;
+      // if (fields.folder) {
+      //   targetFolderData = bookmarks.find(it => it.type === 'folder' && it.name === fields.folder);
+      // }
 
-      const lastId = bookmarks?.length > 0 ? bookmarks[bookmarks.length - 1].id : 0;
-      bookmarks.push({
-        id: lastId + 1,
-        pId: targetFolderData?.id || 0,
-        type: 'url',
-        name: fields.name,
-        value: fields.url,
-      })
+      // const lastId = bookmarks?.length > 0 ? bookmarks[bookmarks.length - 1].id : 0;
+      // bookmarks.push({
+      //   id: lastId + 1,
+      //   pId: targetFolderData?.id || 0,
+      //   type: 'url',
+      //   name: fields.name,
+      //   value: fields.url,
+      // })
 
       console.log('bookmarks:', bookmarks)
       saveBookMarks([...bookmarks]);

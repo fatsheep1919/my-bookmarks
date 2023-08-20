@@ -26,13 +26,8 @@ function App() {
   return (
     <BookMarkContext.Provider value={{ bookmarks }}>
       <Routes>
-        {/* <Route path="/" element={<Layout />}>
-          <Route index element={<DashboardPage />} />
-          <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="list" element={<ListPage />} />
-        </Route> */}
         <Route path='/my-bookmark/' element={<Layout />}>
-          <Route path='index.html' element={<DashboardPage />} />
+          <Route path='index.html' element={<ListPage />} />
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="list" element={<ListPage />} />
         </Route>

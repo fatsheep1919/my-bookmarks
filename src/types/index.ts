@@ -1,22 +1,11 @@
-export interface BookMark {
-  id: number;
-  pId: number;
-  type: 'url' | 'folder';
-  name?: string;
-  value?: string; // type === url
-  layout?: {
-    i: string;
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-  }; // type === folder
-  pageTitle?: string;
-  favicon?: string;
-}
-
-export interface BookMarkTreeNode extends BookMark {
-  children?: BookMark[];
+export interface BookMarkRaw {
+  id: string;
+  title?: string;
+  parentId?: string;
+  index?: number;
+  url?: string;
+  dateAdded?: number;
+  children?: BookMarkRaw[];
 }
 
 export interface BookMarkInput {
@@ -25,13 +14,17 @@ export interface BookMarkInput {
   folder?: string;
 }
 
-//
+export interface BookMarkTreeNode extends BookMarkRaw {
+  key: string;
+  children?: BookMarkTreeNode[];
+}
 
-export interface BookMarkRaw {
-  id: string;
-  title?: string;
-  parentId?: string;
-  index?: number;
-  dateAdded?: number;
-  children?: BookMarkRaw[];
+export interface BookMarkGridItem extends BookMarkRaw {
+  layout?: {
+    i: string;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  };
 }

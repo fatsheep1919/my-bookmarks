@@ -17,7 +17,7 @@ export default function GridItemContent(props: IProps) {
       </div>
       <div className="flex-1 px-4 py-2">
         {data?.children?.map(it => (
-          <div key={it.id}>{it.name}</div>
+          <div key={it.id}>{it.title}</div>
         ))}
       </div>
     </div>
