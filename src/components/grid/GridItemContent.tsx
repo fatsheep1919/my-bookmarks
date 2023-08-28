@@ -18,7 +18,7 @@ export default function GridItemContent(props: IProps) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="w-full h-12 bg-slate-300 px-4 py-2 flex items-center cursor-move">
+      <div className="w-full h-12 bg-slate-300 px-4 py-1 flex items-center cursor-move">
         {data?.title || `folder-${data?.id || 'unknown'}`}
         <span>({data?.children?.length || 0})</span>
       </div>
@@ -36,7 +36,7 @@ export default function GridItemContent(props: IProps) {
                 avatar={
                   item.url ? <Avatar src={faviconURL(item.url, 32)}/> : null
                 }
-                title={<a href={item.url}>{item.title}</a>}
+                title={<span>{item.title}</span>}
                 description={
                   <div className="text-ellipsis whitespace-nowrap overflow-hidden">{item.url}</div>
                 }

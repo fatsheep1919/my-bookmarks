@@ -18,42 +18,25 @@ interface CustomLayout extends Layout {
   data?: BookMarkRaw | null;
 }
 
-function getColCount() {
-  const width = Math.floor(window.innerWidth * 0.83);
-  if (width <= 720) {
-    return 1;
-  } else if (width <= 960) {
-    return 2;
-  }
-  return 3;
-}
-
 export default function Grid() {
-  // const layout: Layout[] = [
-  //   { i: "a", x: 0, y: 0, w: 2, h: 2, isDraggable: false, isResizable: false, },
-  //   { i: "b", x: 2, y: 0, w: 2, h: 2 },
-  //   { i: "c", x: 4, y: 0, w: 2, h: 2 },
-  //   { i: "d", x: 0, y: 3, w: 2, h: 2 },
-  //   { i: "e", x: 2, y: 3, w: 2, h: 2 },
-  //   { i: "f", x: 4, y: 3, w: 2, h: 2 }
-  // ];
-
   const { bookmarks } = useContext(BookMarkContext);
   const layout: CustomLayout[] = useMemo(() => {
     const flatternTreeData: BookMarkTreeNode[] = [];
     formatToFlatternTreeNode(bookmarks?.[0]?.children || [], flatternTreeData);
 
-    const folders = flatternTreeData.filter(it => it.type === 'folder')
+    const folders = flatternTreeData
+      .filter(it => it.type === 'folder' && (it.children || []).length > 0)
       .sort((a, b) => (b.children || []).length - (a.children || []).length);
     console.log('folders:', folders)
-    const colCount = getColCount();
+    const colSpan = folders.length <= 4 ? (12 / folders.length) : 3;
+    const colCount = 12 / colSpan;
     const rowCount = Math.ceil(folders.length / colCount);
 
     return folders.map((folder, index) => ({
       i: `${folder.id}`,
-      x: index % colCount,
+      x: (index % colCount) * colSpan,
       y: Math.floor(index / colCount),
-      w: 1,
+      w: colSpan,
       h: rowCount < 2 ? 4 : 2,
       data: findById(bookmarks?.[0], folder.id),
     }));
@@ -63,8 +46,8 @@ export default function Grid() {
     <div className='my-2 bg-slate-100'>
       <ResponsiveGridLayout
         breakpoints={{ md: 960, sm: 720 }}
-        cols={{ md: 3, sm: 2 }}
-        rowHeight={130}
+        cols={{ md: 12, sm: 12 }}
+        rowHeight={135}
       >
         {layout.map((item) => (
           <div
@@ -74,7 +57,6 @@ export default function Grid() {
           >
             <GridItemContent data={item.data} />
           </div>
-          
         ))}
       </ResponsiveGridLayout>
     </div>

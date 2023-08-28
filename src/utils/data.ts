@@ -20,7 +20,7 @@ export function formatToFlatternTreeNode(rawData: BookMarkRaw[], arr: BookMarkTr
       title: it.title || it.id,
       key: it.id,
       type: it.children ? 'folder' : 'url',
-      children: undefined,
+      children: it.children?.map(formatToTreeNode),
     });
 
     if (it.children && it.children.length > 0) {
