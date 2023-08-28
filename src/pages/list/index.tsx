@@ -38,7 +38,6 @@ export default function ListPage() {
       <div className='flex-1 px-6 py-4'>
         <div className='flex justify-end gap-2 mb-4'>
           <Button type='default' danger>Delete All</Button>
-          <Button type='default' danger>Delete Folder</Button>
         </div>
         <ContentList listData={listData} />
       </div>

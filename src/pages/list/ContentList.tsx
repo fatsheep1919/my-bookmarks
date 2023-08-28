@@ -9,11 +9,19 @@ interface IProps {
 
 export default function ContentList(props: IProps) {
   const { listData } = props;
+  const sortedListData = listData?.sort((a, b) => {
+    if ((a.children && b.children) || (!a.children && !b.children)) {
+      return (a.title || '').localeCompare(b.title || '');
+    } else if (a.children && !b.children) {
+      return -1;
+    }
+    return 1;
+  })
 
   return (
     <List
       itemLayout="horizontal"
-      dataSource={listData}
+      dataSource={sortedListData}
       renderItem={(item, index) => (
         <List.Item
           className={`${item.children ? 'bg-gray-100' : ''} hover:bg-gray-200`}

@@ -22,21 +22,22 @@ export default function MenuTree(props: IProps) {
       <div className='flex justify-end mb-4'>
         <Button type='dashed'>New Folder</Button>
       </div>
-      <Tree
-        defaultExpandAll
-        defaultSelectedKeys={['all']}
-        blockNode
-        switcherIcon={<DownOutlined className='mt-4' />}
-        treeData={treeData}
-        titleRender={(it: BookMarkTreeNode): React.ReactNode => {
-          return (
-            <div className='py-1.5 px-3 text-md'>
-              {it.title}
-            </div>
-          )
-        }}
-        onSelect={handleFolderSelected}
-      />
+      {(treeData || []).length > 0 ? (
+        <Tree
+          defaultExpandAll
+          blockNode
+          switcherIcon={<DownOutlined className='mt-4' />}
+          treeData={treeData}
+          titleRender={(it: BookMarkTreeNode): React.ReactNode => {
+            return (
+              <div className='py-1.5 px-3 text-md'>
+                {it.title}
+              </div>
+            )
+          }}
+          onSelect={handleFolderSelected}
+        />
+      ) : null}
     </>
   )
 }
