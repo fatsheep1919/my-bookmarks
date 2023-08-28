@@ -33,7 +33,9 @@ export function filterFolderChildrenOnly(treeNode: BookMarkTreeNode): BookMarkTr
   if (Array.isArray(treeNode.children) && treeNode.children.length >= 0) {
     let folderChildren = treeNode.children.filter(chd => Array.isArray(chd.children) && chd.children.length >= 0);
     if (folderChildren.length > 0) {
-      folderChildren = folderChildren.map(filterFolderChildrenOnly);
+      folderChildren = folderChildren
+        .sort((a, b) => a.id.localeCompare(b.id))
+        .map(filterFolderChildrenOnly);
     }
     treeNode.children = folderChildren;
   }

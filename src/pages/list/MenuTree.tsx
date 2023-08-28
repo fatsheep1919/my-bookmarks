@@ -6,11 +6,12 @@ import { BookMarkTreeNode } from '../../types';
 
 interface IProps {
   treeData: BookMarkTreeNode[];
+  defaultSelectedKey: string[];
   onSelect: (selectedKey: string) => void;
 }
 
 export default function MenuTree(props: IProps) {
-  const { treeData, onSelect } = props;
+  const { treeData, defaultSelectedKey, onSelect } = props;
 
   const handleFolderSelected = (selectedKeys: React.Key[]) => {
     const targetKey = selectedKeys[0] as string;
@@ -35,6 +36,7 @@ export default function MenuTree(props: IProps) {
               </div>
             )
           }}
+          defaultSelectedKeys={defaultSelectedKey}
           onSelect={handleFolderSelected}
         />
       ) : null}
