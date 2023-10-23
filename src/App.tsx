@@ -24,7 +24,12 @@ function App() {
   }, [load]);
 
   return (
-    <BookMarkContext.Provider value={{ bookmarks }}>
+    <BookMarkContext.Provider
+      value={{
+        bookmarks,
+        refresh: load,
+      }
+    }>
       <Routes>
         <Route path='/my-bookmark/' element={<Layout />}>
           <Route path='index.html' element={<ListPage />} />
