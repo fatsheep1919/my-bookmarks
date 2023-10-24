@@ -29,7 +29,6 @@ export default function ContentList(props: IProps) {
           className={`${item.children ? 'bg-gray-100' : ''} hover:bg-gray-200`}
           actions={[
             <a key="list-loadmore-edit">edit</a>,
-            <a key="list-loadmore-move">move</a>,
             <a key="list-loadmore-delete">
               <span className='text-red-500'>delete</span>
             </a>
@@ -44,7 +43,7 @@ export default function ContentList(props: IProps) {
                 size='small'
               /> : <FolderOutlined style={{ fontSize: 24 }} />
             }
-            title={<a href="https://ant.design">{item.title}</a>}
+            title={item.title ? <a href="https://ant.design">{item.title}</a> : null}
             description={item.children ? 'folder' : item.url}
           />
         </List.Item>

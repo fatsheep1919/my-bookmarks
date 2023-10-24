@@ -12,22 +12,29 @@ import ListPage from './pages/list';
 
 function App() {
   const [bookmarks, setBookMarks] = useState<BookMarkRaw[]>([]);
+  const [curFolder, setCurFolder] = useState<BookMarkRaw>();
 
-  const load = useCallback(async () => {
+  const refresh = useCallback(async () => {
     const tree: BookMarkRaw[] = await chrome?.bookmarks?.getTree?.();
     console.log('chrome bookmarks:', tree);
     setBookMarks(tree);
   }, []);
 
+  const updateCurFolder = useCallback((folder: BookMarkRaw) => {
+    setCurFolder(folder);
+  }, []);
+
   useEffect(() => {
-    load();
-  }, [load]);
+    refresh();
+  }, [refresh]);
 
   return (
     <BookMarkContext.Provider
       value={{
         bookmarks,
-        refresh: load,
+        curFolder,
+        refresh,
+        updateCurFolder
       }
     }>
       <Routes>
