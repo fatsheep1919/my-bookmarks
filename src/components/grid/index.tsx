@@ -18,6 +18,21 @@ interface CustomLayout extends Layout {
   data?: BookMarkRaw | null;
 }
 
+function getItemHeight(folder: BookMarkTreeNode): number {
+  const childrenCount = (folder.children || []).filter(it => it.url).length;
+  const minHeight = 2, maxHeight = 4;
+  if (childrenCount <= 3) {
+    return minHeight;
+  }
+
+  let height = minHeight;
+  height += Math.ceil((childrenCount - 3) / 2);
+  // if (height > maxHeight) {
+  //   height = maxHeight;
+  // }
+  return height;
+}
+
 export default function Grid() {
   const { bookmarks } = useContext(BookMarkContext);
   const layout: CustomLayout[] = useMemo(() => {
@@ -27,19 +42,44 @@ export default function Grid() {
     const folders = flatternTreeData
       .filter(it => it.type === 'folder' && (it.children || []).length > 0)
       .sort((a, b) => (b.children || []).length - (a.children || []).length);
-    console.log('folders:', folders)
-    const colSpan = folders.length <= 4 ? (12 / folders.length) : 3;
-    const colCount = 12 / colSpan;
-    const rowCount = Math.ceil(folders.length / colCount);
 
-    return folders.map((folder, index) => ({
-      i: `${folder.id}`,
-      x: (index % colCount) * colSpan,
-      y: Math.floor(index / colCount),
-      w: colSpan,
-      h: rowCount < 2 ? 4 : 2,
-      data: findById(bookmarks?.[0], folder.id),
-    }));
+    const colSpan = 4;
+    let colCount = Math.min(folders.length, Math.ceil(12 / colSpan));
+
+    const colHeightMap: Record<string, number> = {};
+    Array.from({length: colCount}, (v, i) => i).forEach(it => {
+      colHeightMap[it] = 0;
+    });
+    const itemsHeightMap: Record<string, number> = {};
+    folders.forEach((folder) => {
+      itemsHeightMap[folder.id] = getItemHeight(folder);
+    });
+
+    let gridItems = folders.map((folder, index) => {
+      let minIndex = '0';
+      let minColH = colHeightMap[minIndex];
+      Object.keys(colHeightMap).forEach(index => {
+        if (colHeightMap[index] < minColH) {
+          minColH = colHeightMap[index];
+          minIndex = index;
+        }
+      })
+
+      let colH = colHeightMap[minIndex];
+      colHeightMap[minIndex] = colH + itemsHeightMap[folder.id];
+
+      return {
+        i: folder.id,
+        x: parseInt(minIndex) * colSpan,
+        y: colH,
+        w: colSpan,
+        h: folders.length <= colCount ? 4 : itemsHeightMap[folder.id],
+        data: findById(bookmarks?.[0], folder.id),
+      }
+    });
+
+    console.log('gridItems:', gridItems)
+    return gridItems;
   }, [bookmarks]);
 
   return (
