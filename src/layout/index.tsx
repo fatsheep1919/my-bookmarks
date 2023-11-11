@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Button, Select } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
+import DashboardPage from '../pages/dashboard';
+import ListPage from '../pages/list';
 import AddBookMarkModal from '../components/bookmark/AddBookMarkModal';
 
 export default function Layout() {
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [open, setOpen] = useState(false);
 
   const showModal = () => {
@@ -50,8 +52,12 @@ export default function Layout() {
             </div>
           </div>
           <div className='flex gap-2 mx-6'>
-            <Button type="text" onClick={() => navigate('dashboard')}>Dashboard</Button>
-            <Button type="text" onClick={() => navigate('list')}>List</Button>
+            <Button type="text" onClick={() => {
+              setSearchParams({mode: 'dashboard'});
+            }}>Dashboard</Button>
+            <Button type="text" onClick={() => {
+              setSearchParams({mode: 'list'});
+            }}>List</Button>
             <Button type='primary' onClick={showModal} className='ml-2'>Add New</Button>
           </div>
           
@@ -59,8 +65,13 @@ export default function Layout() {
       </div>
       <div className='w-full flex-1 flex justify-center'>
         <div className='w-5/6 h-full overflow-scroll'>
-          <Outlet />
-
+          {
+            searchParams.get('mode') === 'dashboard' ? (
+              <DashboardPage />
+            ) : (
+              <ListPage />
+            )
+          }
         </div>
       </div>
 

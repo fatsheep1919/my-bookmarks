@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require('webpack');
 const HTMLPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin")
 
@@ -31,6 +32,9 @@ module.exports = {
         ],
     },
     plugins: [
+        new webpack.optimize.LimitChunkCountPlugin({
+            maxChunks: 1,
+        }),
         new CopyPlugin({
             patterns: [
                 { from: "manifest.json", to: "../manifest.json" },
@@ -43,7 +47,7 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, "dist/my-bookmark"),
-        filename: "[name].js",
+        filename: "index.js",
     },
 };
 

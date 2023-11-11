@@ -6,9 +6,6 @@ import {
 import { BookMarkRaw } from './types';
 import { BookMarkContext } from './hooks/useBookMarkContext';
 import Layout from './layout';
-import DashboardPage from './pages/dashboard';
-import ListPage from './pages/list';
-
 
 function App() {
   const [bookmarks, setBookMarks] = useState<BookMarkRaw[]>([]);
@@ -38,11 +35,7 @@ function App() {
       }
     }>
       <Routes>
-        <Route path='/my-bookmark/' element={<Layout />}>
-          <Route path='index.html' element={<ListPage />} />
-          <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="list" element={<ListPage />} />
-        </Route>
+        <Route path='/my-bookmark/index.html' element={<Layout />}></Route>
       </Routes>
     </BookMarkContext.Provider>
   );

@@ -21,7 +21,9 @@ interface CustomLayout extends Layout {
 function getItemHeight(folder: BookMarkTreeNode): number {
   const childrenCount = (folder.children || []).filter(it => it.url).length;
   const minHeight = 2, maxHeight = 4;
-  if (childrenCount <= 3) {
+  if (childrenCount === 1) {
+    return 1;
+  } else if (childrenCount <= 3) {
     return minHeight;
   }
 
@@ -40,7 +42,11 @@ export default function Grid() {
     formatToFlatternTreeNode(bookmarks?.[0]?.children || [], flatternTreeData);
 
     const folders = flatternTreeData
-      .filter(it => it.type === 'folder' && (it.children || []).length > 0)
+      .filter(
+        it => it.type === 'folder'
+        && (it.children || []).length > 0
+        && (it.children || []).filter(ch => ch.url).length > 0
+      )
       .sort((a, b) => (b.children || []).length - (a.children || []).length);
 
     const colSpan = 4;
@@ -87,7 +93,7 @@ export default function Grid() {
       <ResponsiveGridLayout
         breakpoints={{ md: 960, sm: 720 }}
         cols={{ md: 12, sm: 12 }}
-        rowHeight={135}
+        rowHeight={140}
       >
         {layout.map((item) => (
           <div

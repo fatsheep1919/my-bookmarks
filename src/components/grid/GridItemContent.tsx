@@ -36,7 +36,9 @@ export default function GridItemContent(props: IProps) {
                 avatar={
                   item.url ? <Avatar src={faviconURL(item.url, 32)}/> : null
                 }
-                title={<span>{item.title}</span>}
+                title={
+                  <div className="text-ellipsis whitespace-nowrap overflow-hidden">{item.title || item.url}</div>
+                }
                 description={
                   <div className="text-ellipsis whitespace-nowrap overflow-hidden">{item.url}</div>
                 }

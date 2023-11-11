@@ -36,7 +36,7 @@ export default function MenuTree(props: IProps) {
           treeData={treeData}
           titleRender={(it: BookMarkTreeNode): React.ReactNode => {
             return (
-              <div className='py-1.5 px-3 text-md'>
+              <div className='py-1.5 px-3 mt-0.5 text-md'>
                 {it.title}
               </div>
             )
