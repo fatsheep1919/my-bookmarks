@@ -28,19 +28,18 @@ export default function GridItemContent(props: IProps) {
           dataSource={(data?.children || []).filter(it => it.url)}
           renderItem={(item, index) => (
             <List.Item
-              className="cursor-pointer hover:bg-gray-200"
+              className="py-2 cursor-pointer hover:bg-gray-200"
               onClick={() => handleClick(item)}
             >
               <List.Item.Meta
                 className='px-2'
                 avatar={
-                  item.url ? <Avatar src={faviconURL(item.url, 32)}/> : null
+                  item.url
+                  ? <Avatar style={{ width: '24px', height: '24px' }} src={faviconURL(item.url, 24)}/>
+                  : null
                 }
                 title={
                   <div className="text-ellipsis whitespace-nowrap overflow-hidden">{item.title || item.url}</div>
-                }
-                description={
-                  <div className="text-ellipsis whitespace-nowrap overflow-hidden">{item.url}</div>
                 }
               />
             </List.Item>

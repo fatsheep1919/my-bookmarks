@@ -27,8 +27,8 @@ function getItemHeight(folder: BookMarkTreeNode): number {
     return minHeight;
   }
 
-  let height = minHeight;
-  height += Math.ceil((childrenCount - 3) / 2);
+  let height = 1;
+  height += Math.ceil((childrenCount - 1) / 3);
   // if (height > maxHeight) {
   //   height = maxHeight;
   // }
