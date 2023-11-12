@@ -8,13 +8,12 @@ import AddFolderModal from './AddFolderModal';
 
 interface IProps {
   treeData: BookMarkTreeNode[];
-  defaultSelectedKey: string[];
   onSelect: (selectedKey: string) => void;
 }
 
 export default function MenuTree(props: IProps) {
-  const { treeData, defaultSelectedKey, onSelect } = props;
-  const { refresh } = useContext(BookMarkContext);
+  const { treeData, onSelect } = props;
+  const { curFolder, refresh } = useContext(BookMarkContext);
 
   const [open, setOpen] = useState(false);
 
@@ -41,7 +40,7 @@ export default function MenuTree(props: IProps) {
               </div>
             )
           }}
-          defaultSelectedKeys={defaultSelectedKey}
+          selectedKeys={curFolder ? [curFolder.id] : []}
           onSelect={handleFolderSelected}
         />
       ) : null}

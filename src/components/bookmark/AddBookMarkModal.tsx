@@ -32,7 +32,7 @@ interface IProps {
 
 export default function AddBookMarkModal(props: IProps) {
   const { visible, onClose } = props;
-  const { bookmarks, curFolder, refresh } = useContext(BookMarkContext);
+  const { bookmarks, curFolder, curItem, refresh } = useContext(BookMarkContext);
   const [form] = Form.useForm();
 
   const folderOptions: FolderOption[] = [];
@@ -42,29 +42,46 @@ export default function AddBookMarkModal(props: IProps) {
     try {
       await form.validateFields();
       const { url, name, folder } = form.getFieldsValue();
-      chrome?.bookmarks?.create(
-        {
-          url,
-          title: name,
-          parentId: folder,
-        },
-        () => {
-          onClose();
-          refresh();
-        },
-      );
+
+      if (curItem) {
+        chrome?.bookmarks?.update(
+          curItem.id,
+          {
+            url,
+            title: name,
+          },
+          () => {
+            onClose();
+            refresh();
+          },
+        );
+      } else {
+        chrome?.bookmarks?.create(
+          {
+            url,
+            title: name,
+            parentId: folder,
+          },
+          () => {
+            onClose();
+            refresh();
+          },
+        );
+      }
     } catch (error) {}
-  }, [form, refresh, onClose]);
+  }, [form, curItem, refresh, onClose]);
 
   const handleAfterClose = useCallback(() => {
     form.resetFields();
   }, [form]);
 
   useEffect(() => {
-    if (visible && curFolder) {
-      form.setFieldValue('folder', curFolder.id);
+    if (visible) {
+      form.setFieldValue('url', curItem?.url || '');
+      form.setFieldValue('name', curItem?.title || '');
+      form.setFieldValue('folder', curFolder?.id || folderOptions[0]?.id);
     }
-  }, [visible, curFolder, form]);
+  }, [visible, curFolder, curItem, form]);
 
   return (
     <Modal
@@ -73,7 +90,7 @@ export default function AddBookMarkModal(props: IProps) {
       onOk={handleSave}
       onCancel={onClose}
       afterClose={handleAfterClose}
-      okText="Add"
+      okText="Ok"
       cancelText="Cancel"
     >
       <div className='my-6'>
@@ -91,7 +108,7 @@ export default function AddBookMarkModal(props: IProps) {
             <Input allowClear />
           </Form.Item>
           <Form.Item name="folder" label="Folder">
-            <Select placeholder="Select a folder" defaultActiveFirstOption>
+            <Select placeholder="Select a folder" disabled={curItem !== null}>
               {
                 folderOptions.map(it => (
                   <Select.Option key={it.id} value={it.id}>{it.title}</Select.Option>

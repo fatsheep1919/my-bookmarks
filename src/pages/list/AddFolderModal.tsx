@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Select  } from 'antd';
+import { Modal, Form, Input, Select, Button  } from 'antd';
 import { useCallback } from 'react';
 
 interface IProps {
@@ -35,14 +35,14 @@ export default function AddFolderModal(props: IProps) {
       onOk={handleOk}
       onCancel={onClose}
       okText="Add"
-      cancelText="Cancel"
+      cancelText="Cancel"     
     >
-      <div className='my-6'>
+      <div className='px-9 my-6'>
         <Form
           form={form}
           {...{
             labelCol: { span: 6 },
-            wrapperCol: { span: 16 },
+            wrapperCol: { span: 18 },
           }}
         >
           <Form.Item name="name" label="Folder Name">

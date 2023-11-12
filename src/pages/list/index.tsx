@@ -1,7 +1,7 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Button } from 'antd';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { Button, Typography } from 'antd';
 
-import { BookMarkRaw, BookMarkTreeNode } from '../../types';
+import { BookMarkRaw } from '../../types';
 import { BookMarkContext } from '../../hooks/useBookMarkContext';
 import {
   formatToTreeNode,
@@ -12,11 +12,16 @@ import MenuTree from './MenuTree';
 import ContentList from './ContentList';
 
 export default function ListPage() {
-  const { bookmarks, updateCurFolder } = useContext(BookMarkContext);
-
-  const [menuTreeData, setMenuTreeData] = useState<BookMarkTreeNode[]>([]);
-  const [selectedKey, setSelectedKey] = useState<string>();
+  const { bookmarks, curFolder, updateCurFolder } = useContext(BookMarkContext);
   const [listData, setListData] = useState<BookMarkRaw[]>([]);
+
+  const menuTreeData = useMemo(() => {
+    const folderTreeData = (bookmarks || [])
+      .map(formatToTreeNode)
+      .map(filterFolderChildrenOnly);
+
+    return folderTreeData?.[0]?.children || [];
+  }, [bookmarks]);
 
   const handleMenuTreeSelected = useCallback((selectedKey: string) => {
     const re = findById(bookmarks?.[0], selectedKey);
@@ -27,34 +32,32 @@ export default function ListPage() {
   }, [bookmarks, updateCurFolder]);
 
   useEffect(() => {
-    const folderTreeData = (bookmarks || [])
-      .map(formatToTreeNode)
-      .map(filterFolderChildrenOnly);
-    console.log('menuTreeData:', folderTreeData);
-
-    const menuTreeData = folderTreeData?.[0]?.children || [];
-    setMenuTreeData(menuTreeData);
-
-    const firstFolderKey = menuTreeData?.[0]?.id;
-    if (firstFolderKey) {
-      setSelectedKey(firstFolderKey);
-      handleMenuTreeSelected(firstFolderKey)
+    if (curFolder) {
+      handleMenuTreeSelected(curFolder.id)
+    } else {
+      const firstFolder = menuTreeData?.[0];
+      if (firstFolder) {
+        handleMenuTreeSelected(firstFolder.id)
+      }
     }
-  }, [bookmarks, handleMenuTreeSelected]);
+  }, [curFolder, menuTreeData, handleMenuTreeSelected]);
 
   return (
     <div className='h-full flex'>
       <div className='w-1/5 py-4'>
-        <MenuTree
-          treeData={menuTreeData}
-          defaultSelectedKey={selectedKey ? [selectedKey] : []}
-          onSelect={handleMenuTreeSelected}
-        />
+        <MenuTree treeData={menuTreeData} onSelect={handleMenuTreeSelected} />
       </div>
       <div className='flex-1 px-6 py-4'>
-        <div className='flex justify-end gap-2 mb-4'>
-          <Button type='primary' ghost>Edit Folder</Button>
-          <Button type='primary' danger ghost>Delete Folder</Button>
+        <div className='flex justify-between'>
+          <div>
+            <Typography.Title level={3}>
+              {curFolder?.title}
+            </Typography.Title>
+          </div>
+          <div className='flex gap-2 mb-4'>
+            <Button type='primary' ghost>Edit Folder</Button>
+            <Button type='primary' danger ghost>Delete Folder</Button>
+          </div>
         </div>
         <ContentList listData={listData} />
       </div>

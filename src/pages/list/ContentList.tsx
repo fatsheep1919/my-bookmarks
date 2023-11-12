@@ -1,9 +1,11 @@
+import React, { useContext } from 'react';
 import { Avatar, List } from 'antd';
 import { FolderOutlined } from '@ant-design/icons';
 
 
 import { BookMarkRaw } from "../../types";
 import { faviconURL } from "../../utils/favicon";
+import { BookMarkContext } from '../../hooks/useBookMarkContext';
 
 interface IProps {
   listData: BookMarkRaw[];
@@ -11,6 +13,8 @@ interface IProps {
 
 export default function ContentList(props: IProps) {
   const { listData } = props;
+  const { openBookMarkModal } = useContext(BookMarkContext);
+
   const formattedListData = listData?.sort((a, b) => {
     if ((a.children && b.children) || (!a.children && !b.children)) {
       return (a.title || '').localeCompare(b.title || '');
@@ -28,8 +32,15 @@ export default function ContentList(props: IProps) {
         <List.Item
           className={`${item.children ? 'bg-gray-100' : ''} hover:bg-gray-200`}
           actions={[
-            <a key="list-loadmore-edit">edit</a>,
-            <a key="list-loadmore-delete">
+            <a
+              key="list-loadmore-edit"
+              onClick={() => openBookMarkModal(item)}
+            >
+              edit
+            </a>,
+            <a
+              key="list-loadmore-delete"
+            >
               <span className='text-red-500'>delete</span>
             </a>
           ]}
