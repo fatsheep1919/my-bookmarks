@@ -1,29 +1,8 @@
 import { useCallback, useContext, useEffect } from 'react';
 import { Modal, Form, Input, Select  } from 'antd';
 
-import { BookMarkRaw } from '../../types';
 import { BookMarkContext } from '../../hooks/useBookMarkContext';
-
-type FolderOption = {
-  id: string;
-  title: string;
-}
-
-const formatFolderOptions = (nodes: BookMarkRaw[], path: string, arr: FolderOption[]) => {
-  nodes
-    .filter(it => Array.isArray(it.children) && it.children.length >= 0)
-    .forEach(it => {
-      const title = `${path}/${it.title}`;
-      arr.push({
-        ...it,
-        title,
-      });
-
-      if (it.children && it.children.length > 0) {
-        formatFolderOptions(it.children, title, arr);
-      }
-    });
-}
+import { formatFolderOptions } from '../../utils/data';
 
 interface IProps {
   visible: boolean;
@@ -32,10 +11,10 @@ interface IProps {
 
 export default function AddBookMarkModal(props: IProps) {
   const { visible, onClose } = props;
-  const { bookmarks, curFolder, curItem, refresh } = useContext(BookMarkContext);
+  const { bookmarks, curFolder, modalTargetItem, refresh } = useContext(BookMarkContext);
   const [form] = Form.useForm();
 
-  const folderOptions: FolderOption[] = [];
+  const folderOptions: { id: string, title: string }[] = [];
   formatFolderOptions(bookmarks?.[0]?.children || [], '', folderOptions);
 
   const handleSave = useCallback(async () => {
@@ -43,9 +22,9 @@ export default function AddBookMarkModal(props: IProps) {
       await form.validateFields();
       const { url, name, folder } = form.getFieldsValue();
 
-      if (curItem) {
+      if (modalTargetItem) {
         chrome?.bookmarks?.update(
-          curItem.id,
+          modalTargetItem.id,
           {
             url,
             title: name,
@@ -69,7 +48,7 @@ export default function AddBookMarkModal(props: IProps) {
         );
       }
     } catch (error) {}
-  }, [form, curItem, refresh, onClose]);
+  }, [form, modalTargetItem, refresh, onClose]);
 
   const handleAfterClose = useCallback(() => {
     form.resetFields();
@@ -77,11 +56,11 @@ export default function AddBookMarkModal(props: IProps) {
 
   useEffect(() => {
     if (visible) {
-      form.setFieldValue('url', curItem?.url || '');
-      form.setFieldValue('name', curItem?.title || '');
+      form.setFieldValue('url', modalTargetItem?.url || '');
+      form.setFieldValue('name', modalTargetItem?.title || '');
       form.setFieldValue('folder', curFolder?.id || folderOptions[0]?.id);
     }
-  }, [visible, curFolder, curItem, form]);
+  }, [visible, curFolder, modalTargetItem, form]);
 
   return (
     <Modal
@@ -108,7 +87,7 @@ export default function AddBookMarkModal(props: IProps) {
             <Input allowClear />
           </Form.Item>
           <Form.Item name="folder" label="Folder">
-            <Select placeholder="Select a folder" disabled={curItem !== null}>
+            <Select placeholder="Select a folder" disabled={modalTargetItem !== null}>
               {
                 folderOptions.map(it => (
                   <Select.Option key={it.id} value={it.id}>{it.title}</Select.Option>

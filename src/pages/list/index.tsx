@@ -24,10 +24,12 @@ export default function ListPage() {
   }, [bookmarks]);
 
   const handleMenuTreeSelected = useCallback((selectedKey: string) => {
-    const re = findById(bookmarks?.[0], selectedKey);
-    if (re) {
-      updateCurFolder(re);
-      setListData(re.children || []);
+    if (selectedKey) {
+      const re = findById(bookmarks?.[0], selectedKey);
+      if (re) {
+        updateCurFolder(re);
+        setListData(re.children || []);
+      }
     }
   }, [bookmarks, updateCurFolder]);
 
@@ -55,8 +57,17 @@ export default function ListPage() {
             </Typography.Title>
           </div>
           <div className='flex gap-2 mb-4'>
-            <Button type='primary' ghost>Edit Folder</Button>
-            <Button type='primary' danger ghost>Delete Folder</Button>
+            {
+              curFolder?.parentId !== '0' ? (
+                <Button
+                  ghost
+                  type='primary'
+                  onClick={() => handleMenuTreeSelected(curFolder?.parentId || '')}
+                >
+                  Parent Folder
+                </Button>
+              ) : null
+            }
           </div>
         </div>
         <ContentList listData={listData} />

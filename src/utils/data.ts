@@ -56,3 +56,19 @@ export function findById(bookmark: BookMarkRaw, id: string): BookMarkRaw | null 
   }
   return null;
 }
+
+export function formatFolderOptions(nodes: BookMarkRaw[], path: string, arr: { id: string, title: string }[]) {
+  nodes
+    .filter(it => Array.isArray(it.children) && it.children.length >= 0)
+    .forEach(it => {
+      const title = `${path}/${it.title}`;
+      arr.push({
+        ...it,
+        title,
+      });
+
+      if (it.children && it.children.length > 0) {
+        formatFolderOptions(it.children, title, arr);
+      }
+    });
+}

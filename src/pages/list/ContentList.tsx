@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Avatar, List } from 'antd';
 import { FolderOutlined } from '@ant-design/icons';
 
@@ -13,7 +13,7 @@ interface IProps {
 
 export default function ContentList(props: IProps) {
   const { listData } = props;
-  const { openBookMarkModal } = useContext(BookMarkContext);
+  const { openBookMarkModal, openFolderModal } = useContext(BookMarkContext);
 
   const formattedListData = listData?.sort((a, b) => {
     if ((a.children && b.children) || (!a.children && !b.children)) {
@@ -23,6 +23,14 @@ export default function ContentList(props: IProps) {
     }
     return 1;
   });
+
+  const handleEdit = useCallback((item: BookMarkRaw) => {
+    if (item.children) {
+      openFolderModal(item);
+    } else {
+      openBookMarkModal(item);
+    }
+  }, [openBookMarkModal, openFolderModal]);
 
   return (
     <List
@@ -34,7 +42,7 @@ export default function ContentList(props: IProps) {
           actions={[
             <a
               key="list-loadmore-edit"
-              onClick={() => openBookMarkModal(item)}
+              onClick={() => handleEdit(item)}
             >
               edit
             </a>,

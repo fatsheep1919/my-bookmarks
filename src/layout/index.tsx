@@ -8,6 +8,7 @@ import { BookMarkContext } from '../hooks/useBookMarkContext';
 import Header from './Header';
 import DashboardPage from '../pages/dashboard';
 import ListPage from '../pages/list';
+import AddFolderModal from '../components/bookmark/AddFolderModal';
 import AddBookMarkModal from '../components/bookmark/AddBookMarkModal';
 
 export default function Layout() {
@@ -15,7 +16,8 @@ export default function Layout() {
 
   const [bookmarks, setBookMarks] = useState<BookMarkRaw[]>([]);
   const [curFolder, setCurFolder] = useState<BookMarkRaw | null>(null);
-  const [curItem, setCurItem] = useState<BookMarkRaw | null>(null);
+  const [modalTargetFolder, setModalTargetFolder] = useState<BookMarkRaw | null>(null);
+  const [modalTargetItem, setModalTargetItem] = useState<BookMarkRaw | null>(null);
 
   const [folderModalVisible, setFolderModalVisible] = useState(false);
   const [bookmarkModalVisible, setBookMarkModalVisible] = useState(false);
@@ -28,13 +30,23 @@ export default function Layout() {
 
   const updateCurFolder = useCallback((folder: BookMarkRaw) => setCurFolder(folder), []);
 
+  const openFolderModal = useCallback((targetFolder: BookMarkRaw | null) => {
+    setModalTargetFolder(targetFolder);
+    setFolderModalVisible(true);
+  }, []);
+
+  const closeFolderModal = useCallback(() => {
+    setModalTargetFolder(null);
+    setFolderModalVisible(false);
+  }, []);
+
   const openBookMarkModal = useCallback((item: BookMarkRaw | null) => {
-    setCurItem(item);
+    setModalTargetItem(item);
     setBookMarkModalVisible(true);
   }, []);
 
   const closeBookMarkModal = useCallback(() => {
-    setCurItem(null);
+    setModalTargetItem(null);
     setBookMarkModalVisible(false);
   }, []);
 
@@ -60,11 +72,14 @@ export default function Layout() {
       value={{
         bookmarks,
         curFolder,
-        curItem,
+        modalTargetFolder,
+        modalTargetItem,
         refresh,
         updateCurFolder,
         openBookMarkModal,
         closeBookMarkModal,
+        openFolderModal,
+        closeFolderModal,
       }}
     >
       <div className="h-screen flex flex-col">
@@ -96,6 +111,10 @@ export default function Layout() {
         <AddBookMarkModal
           visible={bookmarkModalVisible}
           onClose={closeBookMarkModal}
+        />
+        <AddFolderModal
+          visible={folderModalVisible}
+          onClose={closeFolderModal}
         />
       </div>
     </BookMarkContext.Provider>
