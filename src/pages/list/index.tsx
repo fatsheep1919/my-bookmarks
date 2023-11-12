@@ -70,7 +70,7 @@ export default function ListPage() {
             }
           </div>
         </div>
-        <ContentList listData={listData} />
+        <ContentList listData={listData} onFolderClick={handleMenuTreeSelected} />
       </div>
     </div>
   )
