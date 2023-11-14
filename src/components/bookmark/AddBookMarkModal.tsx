@@ -64,7 +64,7 @@ export default function AddBookMarkModal(props: IProps) {
 
   return (
     <Modal
-      title="Add New BookMark"
+      title="Edit BookMark"
       open={visible}
       onOk={handleSave}
       onCancel={onClose}

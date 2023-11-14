@@ -1,7 +1,6 @@
 import React, { useCallback, useContext } from 'react';
 import { Avatar, List, Modal, Button } from 'antd';
-import { FolderOutlined, ExclamationCircleFilled } from '@ant-design/icons';
-
+import { FolderOutlined, ExclamationCircleFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import { BookMarkRaw } from "../../types";
 import { faviconURL } from "../../utils/favicon";
@@ -43,7 +42,7 @@ export default function ContentList(props: IProps) {
 
   const handleRemove = useCallback((item: BookMarkRaw) => {
     Modal.confirm({
-      title: 'Are you sure delete this item?',
+      title: 'Are you sure delete it?',
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
       okType: 'danger',
@@ -80,29 +79,26 @@ export default function ContentList(props: IProps) {
             className={`${item.children ? 'bg-gray-100' : ''} cursor-pointer hover:bg-gray-200`}
             actions={[
               <Button
-                type="link"
                 key="list-loadmore-edit"
+                icon={<EditOutlined />}
+                type='link'
                 onClick={(e: React.MouseEvent) => {
                   handleEdit(item);
                   e.stopPropagation();
                   e.preventDefault();
                 }}
-              >
-                edit
-              </Button>,
+              />,
               <Button
-                type="link"
                 key="list-loadmore-delete"
+                icon={<DeleteOutlined />}
+                type='link'
+                danger
                 onClick={(e: React.MouseEvent) => {
                   handleRemove(item);
                   e.stopPropagation();
                   e.preventDefault();
                 }}
-              >
-                <span className='text-red-500'>
-                  delete
-                </span>
-              </Button>
+              />
             ]}
           >
             <List.Item.Meta

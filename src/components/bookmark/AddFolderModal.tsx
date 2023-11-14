@@ -62,7 +62,7 @@ export default function AddFolderModal(props: IProps) {
 
   return (
     <Modal
-      title="Add New Folder"
+      title="Edit Folder"
       open={visible}
       onOk={handleOk}
       onCancel={onClose}

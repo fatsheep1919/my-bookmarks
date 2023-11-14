@@ -92,7 +92,7 @@ export default function Layout() {
               <Button type="text" onClick={() => {
                 setSearchParams({mode: 'list'});
               }}>List</Button>
-              <Button type='primary' onClick={() => openBookMarkModal(null)} className='ml-2'>Add New</Button>
+              <Button type='primary' onClick={() => openBookMarkModal(null)} className='ml-2'>New BookMark</Button>
             </div>
           </Header>
         </div>

@@ -94,11 +94,16 @@ export default function Grid() {
         breakpoints={{ md: 960, sm: 720 }}
         cols={{ md: 12, sm: 12 }}
         rowHeight={140}
+        layouts={{
+          md: layout,
+          sm: layout,
+        }}
+        draggableHandle='.cursor-move'
       >
         {layout.map((item) => (
           <div
             key={item.i}
-            data-grid={item}
+            // data-grid={item}
             className='border border-solid bg-white rounded-lg shadow-md'
           >
             <GridItemContent data={item.data} />

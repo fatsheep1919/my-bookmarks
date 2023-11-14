@@ -1,8 +1,11 @@
-import React, { useCallback } from "react";
-import { Avatar, List } from 'antd';
+import React, { useCallback, useContext } from "react";
+import { useSearchParams } from 'react-router-dom';
+import { Avatar, List, Button } from 'antd';
+import { MenuOutlined } from '@ant-design/icons';
 
 import { BookMarkRaw } from "../../types";
 import { faviconURL } from "../../utils/favicon";
+import { BookMarkContext } from '../../hooks/useBookMarkContext';
 
 interface IProps {
   data?: BookMarkRaw | null;
@@ -10,17 +13,28 @@ interface IProps {
 
 export default function GridItemContent(props: IProps) {
   const { data } = props;
-  console.log('GridItem data:', data)
+  const { updateCurFolder } = useContext(BookMarkContext);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClick = useCallback((item: BookMarkRaw) => {
     window.open(item.url, '_blank');
   }, []);
 
+  const handleManageFolder = useCallback(() => {
+    if (data) {
+      updateCurFolder(data);
+      setSearchParams({mode: 'list'});
+    }
+  }, [data, updateCurFolder, setSearchParams]);
+
   return (
     <div className="flex flex-col h-full">
-      <div className="w-full h-12 bg-slate-300 px-4 py-1 flex items-center cursor-move">
-        {data?.title || `folder-${data?.id || 'unknown'}`}
-        <span>({data?.children?.length || 0})</span>
+      <div className="w-full h-12 bg-slate-300 px-4 py-1 flex justify-between items-center">
+        <div className="cursor-move">
+          {data?.title || `folder-${data?.id || 'unknown'}`}
+          <span>({data?.children?.length || 0})</span>
+        </div>
+        <Button type="link" size="small" onClick={handleManageFolder} icon={<MenuOutlined />} />
       </div>
       <div className="flex-1 p-2 overflow-scroll">
         <List
