@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import React, { useCallback, useContext, useEffect, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { Button } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 
-import { Responsive, WidthProvider, Layout, Layouts } from 'react-grid-layout';
+import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 
@@ -39,6 +39,10 @@ const storageKey = 'MY_BOOKMARK_DASHBOARD_LAYOUT';
 
 export default function Grid() {
   const { bookmarks } = useContext(BookMarkContext);
+  const [customLayoutStr, setCustomLayoutStr] = useState(() => {
+    return window.localStorage.getItem(storageKey) || '';
+  });
+
   const layout: CustomLayout[] = useMemo(() => {
     const flatternTreeData: BookMarkTreeNode[] = [];
     formatToFlatternTreeNode(bookmarks?.[0]?.children || [], flatternTreeData);
@@ -65,17 +69,16 @@ export default function Grid() {
 
 
 
-    let customLayout;
-    const str = window.localStorage.getItem(storageKey);
-    if (str) {
+    let customLayout: Array<Layout> = [];
+    if (customLayoutStr) {
       try {
-        customLayout = JSON.parse(str);
-        console.log('read layout:', customLayout)
+        customLayout = JSON.parse(customLayoutStr);
       } catch (err) {
         console.log('Error parsing customed layout:', err);
       }
     }
-    if (customLayout) {
+
+    if (customLayout?.length > 0) {
       const folderIds = folders.map(it => it.id);
       const existingItems = customLayout.filter((it: Layout) => folderIds.includes(it.i)).map((it: Layout) => {
         return {
@@ -107,7 +110,7 @@ export default function Grid() {
         }
       });
 
-      return existingItems.length > 0 ? [...existingItems, ...gridItems] : gridItems;
+      return [...existingItems, ...gridItems].filter(it => it)
     }
 
 
@@ -135,54 +138,58 @@ export default function Grid() {
       }
     });
 
-    console.log('gridItems:', gridItems)
     return gridItems;
-  }, [bookmarks]);
+  }, [bookmarks, customLayoutStr]);
 
-  const handleLayoutChange = useCallback((currentLayout: Layout[], _allLayouts?: Layouts) => {
-    console.log('save layout onLayoutChange:', currentLayout)
-    window.localStorage.setItem(storageKey, JSON.stringify(currentLayout));
+  const handleDragAndResize = useCallback((
+    layout: Layout[],
+    oldItem: Layout,
+    newItem: Layout,
+    placeholder: Layout,
+    event: MouseEvent,
+    element: HTMLElement
+  ) => {
+    const newLayoutStr = JSON.stringify(layout);
+    window.localStorage.setItem(storageKey, newLayoutStr);
+    setCustomLayoutStr(newLayoutStr);
+  }, [])
+
+  const handleReset = useCallback(() => {
+    window.localStorage.setItem(storageKey, '');
+    setCustomLayoutStr('');
   }, []);
-
-  useEffect(() => {
-    if (layout?.length > 0) {
-      console.log('save layout on useEffect')
-      handleLayoutChange(layout.map(it => ({
-        i: it.i,
-        x: it.x,
-        y: it.y,
-        w: it.w,
-        h: it.h
-      })));
-    }
-  }, [layout, handleLayoutChange]);
 
   return (
     <div className='relative my-2 bg-slate-100'>
       <div className='absolute top-0 left-full' title='reset'>
-        <Button type='link' icon={<ReloadOutlined />} />
+        { customLayoutStr && <Button type='link' icon={<ReloadOutlined />} onClick={handleReset} /> }
       </div>
-      <ResponsiveGridLayout
-        breakpoints={{ md: 960, sm: 720 }}
-        cols={{ md: 12, sm: 12 }}
-        rowHeight={140}
-        layouts={{
-          md: layout,
-          sm: layout,
-        }}
-        draggableHandle='.cursor-move'
-        onLayoutChange={handleLayoutChange}
-      >
-        {layout.map((item) => (
-          <div
-            key={item.i}
-            // data-grid={item}
-            className='border border-solid bg-white rounded-lg shadow-md'
+      {
+        layout?.length > 0 && (
+          <ResponsiveGridLayout
+            breakpoints={{ md: 960, sm: 720 }}
+            cols={{ md: 12, sm: 12 }}
+            rowHeight={140}
+            layouts={{
+              md: layout,
+              sm: layout,
+            }}
+            draggableHandle='.cursor-move'
+            onDragStop={handleDragAndResize}
+            onResizeStop={handleDragAndResize}
           >
-            <GridItemContent data={item.data} />
-          </div>
-        ))}
-      </ResponsiveGridLayout>
+            {layout.map((item) => (
+              <div
+                key={item.i}
+                // data-grid={item}
+                className='border border-solid bg-white rounded-lg shadow-md'
+              >
+                <GridItemContent data={item.data} />
+              </div>
+            ))}
+          </ResponsiveGridLayout>
+        )
+      }
     </div>
   )
 }
