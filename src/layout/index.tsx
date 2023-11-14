@@ -97,7 +97,7 @@ export default function Layout() {
           </Header>
         </div>
         <div className='w-full flex-1 flex justify-center'>
-          <div className='w-5/6 h-full overflow-scroll'>
+          <div className='w-5/6 h-full'>
             {
               searchParams.get('mode') === 'dashboard' ? (
                 <DashboardPage />

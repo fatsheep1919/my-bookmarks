@@ -29,8 +29,8 @@ export default function GridItemContent(props: IProps) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="w-full h-12 bg-slate-300 px-4 py-1 flex justify-between items-center">
-        <div className="cursor-move">
+      <div className="w-full h-12 bg-slate-300 px-4 py-1 flex justify-between items-center cursor-move">
+        <div>
           {data?.title || `folder-${data?.id || 'unknown'}`}
           <span>({data?.children?.length || 0})</span>
         </div>
