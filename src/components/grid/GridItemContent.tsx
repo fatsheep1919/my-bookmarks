@@ -20,11 +20,12 @@ export default function GridItemContent(props: IProps) {
     window.open(item.url, '_blank');
   }, []);
 
-  const handleManageFolder = useCallback(() => {
+  const handleManageFolder = useCallback((e: React.MouseEvent) => {
     if (data) {
       updateCurFolder(data);
       setSearchParams({mode: 'list'});
     }
+    e.stopPropagation();
   }, [data, updateCurFolder, setSearchParams]);
 
   return (
@@ -34,7 +35,13 @@ export default function GridItemContent(props: IProps) {
           {data?.title || `folder-${data?.id || 'unknown'}`}
           <span>({data?.children?.length || 0})</span>
         </div>
-        <Button type="link" size="small" onClick={handleManageFolder} icon={<MenuOutlined />} />
+        <Button
+          type="link"
+          size="small"
+          onClick={handleManageFolder}
+          icon={<MenuOutlined />}
+          className="not-draggable"
+        />
       </div>
       <div className="flex-1 p-2 overflow-scroll">
         <List

@@ -149,6 +149,12 @@ export default function Grid() {
     event: MouseEvent,
     element: HTMLElement
   ) => {
+    if (oldItem.w === newItem.w && oldItem.h === newItem.h) {
+      if (oldItem.x === newItem.x && oldItem.y === newItem.y) {
+        return;
+      }
+    }
+
     const newLayoutStr = JSON.stringify(layout);
     window.localStorage.setItem(storageKey, newLayoutStr);
     setCustomLayoutStr(newLayoutStr);
@@ -175,6 +181,7 @@ export default function Grid() {
               sm: layout,
             }}
             draggableHandle='.cursor-move'
+            draggableCancel='.not-draggable'
             onDragStop={handleDragAndResize}
             onResizeStop={handleDragAndResize}
           >
