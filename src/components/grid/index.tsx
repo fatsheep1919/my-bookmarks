@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
-import { Button } from 'antd';
+import { Button, Typography } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 
 import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
@@ -105,7 +105,7 @@ export default function Grid() {
           x: parseInt(minIndex) * colSpan,
           y: colH,
           w: colSpan,
-          h: folders.length <= colCount ? 4 : itemsHeightMap[folder.id],
+          h: folders.length <= colCount ? 3 : itemsHeightMap[folder.id],
           data: findById(bookmarks?.[0], folder.id),
         }
       });
@@ -133,7 +133,7 @@ export default function Grid() {
         x: parseInt(minIndex) * colSpan,
         y: colH,
         w: colSpan,
-        h: folders.length <= colCount ? 4 : itemsHeightMap[folder.id],
+        h: folders.length <= colCount ? 3 : itemsHeightMap[folder.id],
         data: findById(bookmarks?.[0], folder.id),
       }
     });
@@ -171,7 +171,7 @@ export default function Grid() {
         { customLayoutStr && <Button type='link' icon={<ReloadOutlined />} onClick={handleReset} /> }
       </div>
       {
-        layout?.length > 0 && (
+        layout?.length > 0 ? (
           <ResponsiveGridLayout
             breakpoints={{ md: 960, sm: 720 }}
             cols={{ md: 12, sm: 12 }}
@@ -195,6 +195,12 @@ export default function Grid() {
               </div>
             ))}
           </ResponsiveGridLayout>
+        ) : (
+          <Typography.Text type='secondary' className='flex justify-center items-center py-12 text-center'>
+            The bookmarks you saved in the browser will be shown here and operated synchronously.
+            <br />
+            No data will be sent to internet.
+          </Typography.Text>
         )
       }
     </div>
