@@ -83,7 +83,7 @@ export default function Layout() {
       }}
     >
       <div className="h-screen flex flex-col">
-        <div className='w-full h-20 flex shrink-0 justify-center bg-slate-300'>
+        <div className='w-full h-12 flex shrink-0 justify-center bg-slate-300'>
           <Header>
             <div className='flex gap-2 mx-6'>
               <Button type="text" onClick={() => {
@@ -92,12 +92,14 @@ export default function Layout() {
               <Button type="text" onClick={() => {
                 setSearchParams({mode: 'list'});
               }}>Management</Button>
-              <Button type='primary' onClick={() => openBookMarkModal(null)} className='ml-2'>New BookMark</Button>
+              <Button type='primary' onClick={() => openBookMarkModal(null)} className='ml-2'>
+                New BookMark
+              </Button>
             </div>
           </Header>
         </div>
-        <div className='w-full flex-1 flex justify-center'>
-          <div className='w-5/6 h-full'>
+        <div className='w-full flex-1 flex justify-center items-start overflow-y-auto'>
+          <div className='w-5/6'>
             {
               searchParams.get('mode') === 'dashboard' ? (
                 <DashboardPage />

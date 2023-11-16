@@ -7,7 +7,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
   return (
     <div className="w-5/6 h-full flex justify-between items-center">
       <div className='flex justify-center items-center gap-4'>
-        <div className='text-2xl font-bold mx-10'>My-BookMark</div>
+        <div className='text-xl font-bold mx-10'>My-BookMark</div>
         <div className='w-64 ml-6'>
           {/* <Select
             showSearch

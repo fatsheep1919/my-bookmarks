@@ -7,6 +7,8 @@ import { BookMarkRaw } from "../../types";
 import { faviconURL } from "../../utils/favicon";
 import { BookMarkContext } from '../../hooks/useBookMarkContext';
 
+import './styles.css';
+
 interface IProps {
   data?: BookMarkRaw | null;
 }
@@ -30,7 +32,7 @@ export default function GridItemContent(props: IProps) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="w-full h-12 bg-slate-300 px-4 py-1 flex justify-between items-center cursor-move">
+      <div className="w-full h-10 bg-slate-300 px-4 py-1 flex justify-between items-center cursor-move">
         <div>
           {data?.title || `folder-${data?.id || 'unknown'}`}
           <span>({data?.children?.length || 0})</span>
@@ -43,7 +45,7 @@ export default function GridItemContent(props: IProps) {
           className="not-draggable"
         />
       </div>
-      <div className="flex-1 p-2 overflow-scroll">
+      <div className="grid-item-list flex-1 p-2 mb-4 overflow-y-auto">
         <List
           itemLayout="horizontal"
           dataSource={(data?.children || []).filter(it => it.url)}

@@ -110,7 +110,11 @@ export default function ContentList(props: IProps) {
                 /> : <FolderOutlined style={{ fontSize: 24 }} />
               }
               title={item.title ? <a href="https://ant.design">{item.title}</a> : null}
-              description={item.children ? 'folder' : item.url}
+              description={item.children ? 'folder' : (
+                <div className='text-ellipsis whitespace-nowrap overflow-hidden'>
+                  { item.url }
+                </div>
+              )}
             />
           </List.Item>
         </div>
